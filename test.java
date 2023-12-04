@@ -3,3 +3,4 @@ public class BonjourApp {
         System.out.println("Bonjour !");
     }
 }
+https://github.com/devopshint/jenkins-pipeline-example.git
