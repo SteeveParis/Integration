@@ -1,83 +1,52 @@
-public class Main {
-
-	public static void main(String... args) throws Exception {
-		ApplicationContext ctx =
-			new ClassPathXmlApplicationContext("context.xml");
-		// Simple Service
-		TempConverter converter =
-			ctx.getBean("simpleGateway", TempConverter.class);
-		System.out.println(converter.fahrenheitToCelcius(68.0f));
-		// Web Service
-		converter  = ctx.getBean("wsGateway", TempConverter.class);
-		System.out.println(converter.fahrenheitToCelcius(68.0f));
-	}
+public boolean concateneTest() {
+    MyString classATester = new MyString();
+    String a = "salut les ";
+    String b = "zeros";
+    String resultatAttendu = "salut les zeros";
+        String resultatObtenu = classATester.concatene(a, b);
+        if (resultatAttendu.compareTo(resultatObtenu) == 0) {
+         return true;
+        }
+        else {
+         return false;
+        }
 }
+package main;
 
-public interface TempConverter {
+public interface Calculator {
 
-	float fahrenheitToCelcius(float fahren);
+    int multiply(int a, int b);
+    int divide(int a, int b);
+    int add(int a, int b);
+    int substract(int a, int b);
 
 }
+package test;
 
-<!-- Simple Service -->
+import static org.junit.Assert.*;
 
-<int:gateway id="simpleGateway"
-	service-interface="foo.TempConverter"
-	default-request-channel="simpleExpression" />
+import org.junit.Test;
 
-<int:service-activator id="expressionConverter"
-	input-channel="simpleExpression"
-	expression="(payload - 32) / 9 * 5"/>
+public class CalculatorImplTest {
 
-<!-- Web Service -->
+    @Test
+    public final void testMultiply() {
+        fail("Not yet implemented"); // TODO
+    }
 
-<int:gateway id="wsGateway" service-interface="foo.TempConverter"
-	default-request-channel="viaWebService" />
+    @Test
+    public final void testDivide() {
+        fail("Not yet implemented"); // TODO
+    }
 
-<int:chain id="wsChain" input-channel="viaWebService">
-	<int:transformer
-	   expression="'&lt;FahrenheitToCelsius xmlns=&quot;https://www.w3schools.com/xml/&quot;&gt;&lt;Fahrenheit&gt;XXX&lt;/Fahrenheit&gt;&lt;/FahrenheitToCelsius&gt;'.replace('XXX', payload.toString())" />
-	<int-ws:header-enricher>
-		<int-ws:soap-action value="https://www.w3schools.com/xml/FahrenheitToCelsius"/>
-	</int-ws:header-enricher>
-	<int-ws:outbound-gateway
-		uri="https://www.w3schools.com/xml/tempconvert.asmx"/>
-	<int-xml:xpath-transformer
-		xpath-expression="/*[local-name()='FahrenheitToCelsiusResponse']/*[local-name()='FahrenheitToCelsiusResult']"/>
-</int:chain>
+    @Test
+    public final void testAdd() {
+        fail("Not yet implemented"); // TODO
+    }
 
-  @SpringBootApplication
-public class Application {
-
-  public static void main(String[] args) {
-    ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
-    TempConverter converter = ctx.getBean(TempConverter.class);
-    System.out.println(converter.fahrenheitToCelcius(68.0f));
-    ctx.close();
-  }
-
-  @MessagingGateway
-  public interface TempConverter {
-
-    @Gateway(requestChannel = "convert.input")
-    float fahrenheitToCelcius(float fahren);
-
-  }
-
-  @Bean
-  public IntegrationFlow convert() {
-      return f -> f
-        .transform(payload ->
-              "<FahrenheitToCelsius xmlns=\"https://www.w3schools.com/xml/\">"
-            +     "<Fahrenheit>" + payload + "</Fahrenheit>"
-            + "</FahrenheitToCelsius>")
-        .enrichHeaders(h -> h
-            .header(WebServiceHeaders.SOAP_ACTION,
-                "https://www.w3schools.com/xml/FahrenheitToCelsius"))
-        .handle(new SimpleWebServiceOutboundGateway(
-            "https://www.w3schools.com/xml/tempconvert.asmx"))
-        .transform(Transformers.xpath("/*[local-name()=\"FahrenheitToCelsiusResponse\"]"
-            + "/*[local-name()=\"FahrenheitToCelsiusResult\"]"));
-  }
+    @Test
+    public final void testSubstract() {
+        fail("Not yet implemented"); // TODO
+    }
 
 }
