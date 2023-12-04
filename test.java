@@ -20,7 +20,6 @@ public interface Calculator {
     int substract(int a, int b);
 
 }
-package test;
 
 import static org.junit.Assert.*;
 
