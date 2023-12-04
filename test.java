@@ -18,29 +18,6 @@ public interface TempConverter {
 
 }
 
-<int:gateway id="simpleGateway"
-	service-interface="foo.TempConverter"
-	default-request-channel="simpleExpression" />
-
-<int:service-activator id="expressionConverter"
-	input-channel="simpleExpression"
-	expression="(payload - 32) / 9 * 5"/>
-
-<int:gateway id="wsGateway" service-interface="foo.TempConverter"
-	default-request-channel="viaWebService" />
-
-<int:chain id="wsChain" input-channel="viaWebService">
-	<int:transformer
-	   expression="'&lt;FahrenheitToCelsius xmlns=&quot;https://www.w3schools.com/xml/&quot;&gt;&lt;Fahrenheit&gt;XXX&lt;/Fahrenheit&gt;&lt;/FahrenheitToCelsius&gt;'.replace('XXX', payload.toString())" />
-	<int-ws:header-enricher>
-		<int-ws:soap-action value="https://www.w3schools.com/xml/FahrenheitToCelsius"/>
-	</int-ws:header-enricher>
-	<int-ws:outbound-gateway
-		uri="https://www.w3schools.com/xml/tempconvert.asmx"/>
-	<int-xml:xpath-transformer
-		xpath-expression="/*[local-name()='FahrenheitToCelsiusResponse']/*[local-name()='FahrenheitToCelsiusResult']"/>
-</int:chain>
-
 @SpringBootApplication
 public class Application {
 
