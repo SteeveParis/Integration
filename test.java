@@ -17,7 +17,6 @@ public interface TempConverter {
 	float fahrenheitToCelcius(float fahren);
 
 }
-<!-- Simple Service -->
 
 <int:gateway id="simpleGateway"
 	service-interface="foo.TempConverter"
@@ -26,8 +25,6 @@ public interface TempConverter {
 <int:service-activator id="expressionConverter"
 	input-channel="simpleExpression"
 	expression="(payload - 32) / 9 * 5"/>
-
-<!-- Web Service -->
 
 <int:gateway id="wsGateway" service-interface="foo.TempConverter"
 	default-request-channel="viaWebService" />
